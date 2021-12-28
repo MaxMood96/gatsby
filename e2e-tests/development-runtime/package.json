@@ -55,14 +55,14 @@
   "devDependencies": {
     "@testing-library/cypress": "^7.0.0",
     "cross-env": "^5.2.0",
-    "cypress": "6.1.0",
+    "cypress": "7.2.0",
     "fs-extra": "^7.0.1",
     "gatsby-core-utils": "^2.12.0",
     "gatsby-cypress": "^0.1.7",
     "is-ci": "^2.0.0",
     "prettier": "2.0.4",
     "start-server-and-test": "^1.7.11",
-    "yargs": "^12.0.5"
+    "yargs": "^13.1.0"
   },
   "repository": {
     "type": "git",
