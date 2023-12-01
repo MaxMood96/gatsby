@@ -21,6 +21,6 @@
   "devDependencies": {
     "gatsby-plugin-postcss": "next",
     "prettier": "^2.2.1",
-    "tailwindcss": "^1.5.2"
+    "tailwindcss": "^2.2.5"
   }
 }
