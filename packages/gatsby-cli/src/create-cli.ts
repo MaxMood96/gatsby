@@ -3,7 +3,6 @@ import resolveCwd from "resolve-cwd"
 import yargs from "yargs"
 import envinfo from "envinfo"
 import { sync as existsSync } from "fs-exists-cached"
-import clipboardy from "clipboardy"
 import {
   trackCli,
   setDefaultTags,
@@ -274,6 +273,14 @@ function buildLocalCommands(cli: yargs.Argv, isLocalSite: boolean): void {
           default: false,
           describe: `Save the log of changed pages for future comparison.`,
           hidden: true,
+        })
+        .option(`functions-platform`, {
+          type: `string`,
+          describe: `The platform bundled functions will execute on. Defaults to current platform or settings provided by used adapter.`,
+        })
+        .option(`functions-arch`, {
+          type: `string`,
+          describe: `The architecture bundled functions will execute on. Defaults to current architecture or settings provided by used adapter.`,
         }),
     handler: handlerP(
       getCommandHandler(
@@ -357,7 +364,10 @@ function buildLocalCommands(cli: yargs.Argv, isLocalSite: boolean): void {
             console.log(envinfoOutput)
 
             if (copyToClipboard) {
-              clipboardy.writeSync(envinfoOutput)
+              // clipboardy is ESM-only package
+              import(`clipboardy`).then(({ default: clipboardy }) => {
+                clipboardy.writeSync(envinfoOutput)
+              })
             }
           })
       } catch (err) {

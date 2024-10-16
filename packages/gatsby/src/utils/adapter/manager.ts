@@ -7,6 +7,7 @@ import { posix } from "path"
 import { sync as globSync } from "glob"
 import telemetry from "gatsby-telemetry"
 import { copy, pathExists, unlink } from "fs-extra"
+import pathToRegexp from "path-to-regexp"
 import type {
   FunctionsManifest,
   IAdaptContext,
@@ -18,13 +19,14 @@ import type {
   IAdapterFinalConfig,
   IAdapterConfig,
   HeaderRoutes,
+  RemoteFileAllowedUrls,
 } from "./types"
 import { store, readState } from "../../redux"
 import { getPageMode } from "../page-mode"
 import { getStaticQueryPath } from "../static-query-utils"
 import { getAdapterInit } from "./init"
 import {
-  LmdbOnCdnPath,
+  getLmdbOnCdnPath,
   shouldBundleDatastore,
   shouldGenerateEngines,
 } from "../engines-helpers"
@@ -190,7 +192,7 @@ export async function initAdapterManager(): Promise<IAdapterManager> {
       }
 
       // handle lmdb file
-      const mdbInPublicPath = `public/${LmdbOnCdnPath}`
+      const mdbInPublicPath = `public/${getLmdbOnCdnPath()}`
       if (!shouldBundleDatastore()) {
         const mdbPath = getDefaultDbPath() + `/data.mdb`
         copy(mdbPath, mdbInPublicPath)
@@ -204,6 +206,7 @@ export async function initAdapterManager(): Promise<IAdapterManager> {
       let _routesManifest: RoutesManifest | undefined = undefined
       let _functionsManifest: FunctionsManifest | undefined = undefined
       let _headerRoutes: HeaderRoutes | undefined = undefined
+      let _imageCdnAllowedUrls: RemoteFileAllowedUrls | undefined = undefined
       const adaptContext: IAdaptContext = {
         get routesManifest(): RoutesManifest {
           if (!_routesManifest) {
@@ -230,6 +233,20 @@ export async function initAdapterManager(): Promise<IAdapterManager> {
 
           return _headerRoutes
         },
+        get remoteFileAllowedUrls(): RemoteFileAllowedUrls {
+          if (!_imageCdnAllowedUrls) {
+            _imageCdnAllowedUrls = Array.from(
+              store.getState().remoteFileAllowedUrls
+            ).map(urlPattern => {
+              return {
+                urlPattern,
+                regexSource: pathToRegexp(urlPattern).source,
+              }
+            })
+          }
+
+          return _imageCdnAllowedUrls
+        },
         reporter,
         // Our internal Gatsby config allows this to be undefined but for the adapter we should always pass through the default values and correctly show this in the TypeScript types
         trailingSlash: trailingSlash as TrailingSlash,
@@ -251,6 +268,16 @@ export async function initAdapterManager(): Promise<IAdapterManager> {
             `Can't exclude datastore from engine function without adapter providing deployURL`
           )
         }
+
+        if (configFromAdapter?.imageCDNUrlGeneratorModulePath) {
+          global.__GATSBY.imageCDNUrlGeneratorModulePath =
+            configFromAdapter.imageCDNUrlGeneratorModulePath
+        }
+
+        if (configFromAdapter?.fileCDNUrlGeneratorModulePath) {
+          global.__GATSBY.fileCDNUrlGeneratorModulePath =
+            configFromAdapter.fileCDNUrlGeneratorModulePath
+        }
       }
 
       return {
@@ -259,6 +286,8 @@ export async function initAdapterManager(): Promise<IAdapterManager> {
         deployURL: configFromAdapter?.deployURL,
         supports: configFromAdapter?.supports,
         pluginsToDisable: configFromAdapter?.pluginsToDisable ?? [],
+        functionsArch: configFromAdapter?.functionsArch,
+        functionsPlatform: configFromAdapter?.functionsPlatform,
       }
     },
   }
@@ -281,7 +310,7 @@ const headersAreEqual = (a, b): boolean =>
 const getDefaultHeaderRoutes = (pathPrefix: string): HeaderRoutes => [
   {
     path: `${pathPrefix}/*`,
-    headers: BASE_HEADERS,
+    headers: MUST_REVALIDATE_HEADERS,
   },
   {
     path: `${pathPrefix}/static/*`,
@@ -292,7 +321,7 @@ const getDefaultHeaderRoutes = (pathPrefix: string): HeaderRoutes => [
 const customHeaderFilter =
   (route: Route, pathPrefix: string) =>
   (h: IHeader["headers"][0]): boolean => {
-    for (const baseHeader of BASE_HEADERS) {
+    for (const baseHeader of MUST_REVALIDATE_HEADERS) {
       if (headersAreEqual(baseHeader, h)) {
         return false
       }
@@ -313,10 +342,10 @@ function getRoutesManifest(): {
 } {
   const routes: Array<RouteWithScore> = []
   const state = store.getState()
-  const createHeaders = createHeadersMatcher(state.config.headers)
   const pathPrefix = state.program.prefixPaths
     ? state.config.pathPrefix ?? ``
     : ``
+  const createHeaders = createHeadersMatcher(state.config.headers, pathPrefix)
 
   const headerRoutes: HeaderRoutes = [...getDefaultHeaderRoutes(pathPrefix)]
 
