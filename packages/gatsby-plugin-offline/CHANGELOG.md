@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### [6.13.3](https://github.com/gatsbyjs/gatsby/commits/gatsby-plugin-offline@6.13.3/packages/gatsby-plugin-offline) (2024-08-26)
+
+#### Bug Fixes
+
+- pin cheerio [#39066](https://github.com/gatsbyjs/gatsby/issues/39066) [#39069](https://github.com/gatsbyjs/gatsby/issues/39069) ([282caaf](https://github.com/gatsbyjs/gatsby/commit/282caafe45ff3f8f4a8bd0d82807ca5b9b742dd1))
+
+### [6.13.2](https://github.com/gatsbyjs/gatsby/commits/gatsby-plugin-offline@6.13.2/packages/gatsby-plugin-offline) (2024-04-10)
+
+#### Bug Fixes
+
+- handler generation on windows [#38900](https://github.com/gatsbyjs/gatsby/issues/38900) [#38929](https://github.com/gatsbyjs/gatsby/issues/38929) ([edaf016](https://github.com/gatsbyjs/gatsby/commit/edaf016906b593f0e028fa4a4e0b4ecc41cf1cc6))
+
+### [6.13.1](https://github.com/gatsbyjs/gatsby/commits/gatsby-plugin-offline@6.13.1/packages/gatsby-plugin-offline) (2024-01-23)
+
+**Note:** Version bump only for package gatsby-plugin-offline
+
+## [6.13.0](https://github.com/gatsbyjs/gatsby/commits/gatsby-plugin-offline@6.13.0/packages/gatsby-plugin-offline) (2023-12-18)
+
+[🧾 Release notes](https://www.gatsbyjs.com/docs/reference/release-notes/v5.13)
+
+**Note:** Version bump only for package gatsby-plugin-offline
+
 ### [6.12.3](https://github.com/gatsbyjs/gatsby/commits/gatsby-plugin-offline@6.12.3/packages/gatsby-plugin-offline) (2023-10-26)
 
 **Note:** Version bump only for package gatsby-plugin-offline

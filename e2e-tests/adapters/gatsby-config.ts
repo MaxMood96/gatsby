@@ -15,6 +15,22 @@ if (shouldUseDebugAdapter) {
   configOverrides = {
     adapter: debugAdapter(),
   }
+} else {
+  process.env.GATSBY_ADAPTERS_MANIFEST = /* javascript */ `
+    module.exports = [
+      {
+        name: 'Netlify',
+        module: 'gatsby-adapter-netlify',
+        test: () => !!process.env.NETLIFY || !!process.env.NETLIFY_LOCAL,
+        versions: [
+          {
+            gatsbyVersion: '*',
+            moduleVersion: '*',
+          }
+        ],
+      }
+    ]
+  `
 }
 
 const config: GatsbyConfig = {
@@ -24,7 +40,11 @@ const config: GatsbyConfig = {
   },
   trailingSlash,
   pathPrefix,
-  plugins: [],
+  plugins: [
+    `gatsby-plugin-image`,
+    `gatsby-plugin-sharp`,
+    `gatsby-transformer-sharp`,
+  ],
   headers: [
     {
       source: `/*`,
@@ -53,6 +73,15 @@ const config: GatsbyConfig = {
       headers: [
         {
           key: "x-dsg-header",
+          value: "my custom header value",
+        },
+      ],
+    },
+    {
+      source: `routes/ssg/*`,
+      headers: [
+        {
+          key: "x-ssg-header",
           value: "my custom header value",
         },
       ],
