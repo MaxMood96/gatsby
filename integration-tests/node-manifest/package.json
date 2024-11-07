@@ -9,7 +9,7 @@
   "author": "Tyler Barnes <tyler@gatsbyjs.com>",
   "license": "MIT",
   "dependencies": {
-    "gatsby": "next",
+    "gatsby": "5.14.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
