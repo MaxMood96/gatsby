@@ -52,7 +52,7 @@
     "cy:run": "cypress run --browser chrome --record"
   },
   "devDependencies": {
-    "cypress": "^3.8.3",
+    "cypress": "^7.2.0",
     "gatsby-cypress": "^0.4.10",
     "start-server-and-test": "^1.11.3"
   }
