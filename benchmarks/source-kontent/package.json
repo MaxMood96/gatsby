@@ -16,7 +16,7 @@
     "@kentico/gatsby-source-kontent": "^6.0.1",
     "@rshackleton/gatsby-transformer-kontent-image": "^2.0.0",
     "dotenv": "^8.2.0",
-    "gatsby": "^2.19.7",
+    "gatsby": "^5.14.0",
     "gatsby-image": "^2.2.40",
     "gatsby-plugin-benchmark-reporting": "*",
     "gatsby-plugin-sharp": "^2.4.5",
@@ -26,7 +26,7 @@
   },
   "devDependencies": {
     "@kentico/kontent-delivery": "^9.1.1",
-    "@kentico/kontent-management": "^0.3.19",
+    "@kentico/kontent-management": "^2.9.2",
     "cross-env": "^7.0.0",
     "prettier": "^1.19.1",
     "rxjs": "^6.5.5"
