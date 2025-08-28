@@ -11,7 +11,7 @@
     "gatsby-plugin-postcss": "next",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "tailwindcss": "^1.0.0"
+    "tailwindcss": "^2.0.0"
   },
   "devDependencies": {
     "cheerio": "1.0.0-rc.12",
