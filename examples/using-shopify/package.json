@@ -40,6 +40,6 @@
   },
   "devDependencies": {
     "dotenv": "^6.2.0",
-    "limax": "^1.7.0"
+    "limax": "^3.0.0"
   }
 }
