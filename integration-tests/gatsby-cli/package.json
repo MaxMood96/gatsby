@@ -13,7 +13,7 @@
     "gatsby": "next",
     "gatsby-cli": "next",
     "gatsby-core-utils": "next",
-    "jest": "^29.3.1",
+    "jest": "^30.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "strip-ansi": "^6.0.1",
